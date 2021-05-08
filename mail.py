@@ -6,9 +6,9 @@ import smtplib
 import imaplib
 import email
 import random
-#test1
+
 msg = MIMEMultipart()
-TO = 'smart.house.diplom@yandex.ru'
+TO = 'smart.house.diplom@yandex.ru' #pass LJeTI2021yandex
 GMAIL_USER = 'smart.house.diplom@gmail.com'
 GMAIL_PASS = 'LJeTI2021'
 
@@ -27,8 +27,6 @@ mail.login(GMAIL_USER, GMAIL_PASS)
 
 flag = 0
 timing = time.time()
-numkl = random.randint(100, 999)
-print(numkl)
 while True:
 
 
@@ -37,6 +35,9 @@ while True:
         message_ser = str(ser.readline())
         print(message_ser)
         if message_ser[2] == 'F' :
+            server = smtplib.SMTP('smtp.gmail.com: 587')
+            server.starttls()
+            server.login(msg['From'], password)			
             msg = MIMEMultipart()
             msg['From'] = GMAIL_USER
             msg['To'] = TO
@@ -48,7 +49,10 @@ while True:
             print("successfully sent email to:"+  msg['To'])
             timing = time.time()
             flag = 1
-        if message_ser[2] == 'H' :
+        if message_ser[2] == 'H':
+            server = smtplib.SMTP('smtp.gmail.com: 587')
+            server.starttls()
+            server.login(msg['From'], password)		
             msg = MIMEMultipart()
             msg['From'] = GMAIL_USER
             msg['To'] = TO
@@ -58,13 +62,29 @@ while True:
             msg.attach(MIMEText(message, 'plain'))
             server.sendmail(msg['From'], msg['To'], msg.as_string())
             print("successfully sent email to:"+  msg['To'])
+        if message_ser[2] == 'W':
+            server = smtplib.SMTP('smtp.gmail.com: 587')
+            server.starttls()
+            server.login(msg['From'], password)		
+            msg = MIMEMultipart()
+            msg['From'] = GMAIL_USER
+            msg['To'] = TO
+            msg['Subject'] = "Протечка!"
+            num = random.randint(100, 999)
+            message = 'Обнаружена протечка в системе водоснабжения!'
+            msg.attach(MIMEText(message, 'plain'))
+            server.sendmail(msg['From'], msg['To'], msg.as_string())
+            print("successfully sent email to:"+  msg['To'])
         if message_ser[2] == 'A' :
+            server = smtplib.SMTP('smtp.gmail.com: 587')
+            server.starttls()
+            server.login(msg['From'], password)		
             msg = MIMEMultipart()
             msg['From'] = GMAIL_USER
             msg['To'] = TO
             msg['Subject'] = "Климат"
             num = random.randint(100, 999)
-            message = 'Температура: Влажность:'+message_ser
+            message = 'Температура:'+message_ser.split(":")[1]+' Влажность:'+message_ser.split(":")[2]
             msg.attach(MIMEText(message, 'plain'))
             server.sendmail(msg['From'], msg['To'], msg.as_string())
             print("successfully sent email to:"+  msg['To'])
@@ -133,4 +153,3 @@ while True:
             if time.time() - timing > 50.0:
                 flag = 3
     time.sleep(0.5) 
-server.quit()

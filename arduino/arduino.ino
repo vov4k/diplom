@@ -61,6 +61,12 @@ void setup() {
 }
 
 void loop() {
+
+  if (ps || rr || sigRFID || sigwater) {
+    return;
+  }
+
+  
   float humidity = dht.readHumidity();
   float temperature = dht.readTemperature();
   long now = millis();
@@ -72,6 +78,7 @@ void loop() {
   }
   if (analogRead(WATERPIN) > 200) {
     sigwater = true;
+    Serial.println("WATER");
     digitalWrite(PSPIN_, HIGH);
   }
 
@@ -98,9 +105,7 @@ void loop() {
   }
 
 
-  if (ps || rr || sigRFID || sigwater) {
-    return;
-  }
+
 
 
   if (analogRead(HUMANPIN) > 500) {
@@ -119,7 +124,7 @@ void loop() {
 
   if (now > (lastSend_klimat + minSecsBetweenEmails * 1000)) {
     lastSend_klimat = now;
-    Serial.println("ANSWERKLIMAT:" + String(temperature) + ":" + String(humidity));
+    Serial.println("ANSWERKLIMAT:" + String(temperature) + ":" + String(humidity)+":");
   }
   if (oo_mode) {
     analogWrite(OOPIN_, analogRead(SVETPIN) / 4);

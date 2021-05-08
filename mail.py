@@ -6,7 +6,7 @@ import smtplib
 import imaplib
 import email
 import random
-#test
+#test1
 msg = MIMEMultipart()
 TO = 'smart.house.diplom@yandex.ru'
 GMAIL_USER = 'smart.house.diplom@gmail.com'
